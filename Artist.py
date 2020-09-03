@@ -11,11 +11,5 @@ class Artist:
         self.nimi = p_nimi
         self.albumid = []
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
-
-    def lisa_albumi(self, p_album):
+    def lisa_album(self, p_album):
         self.albumid.append(p_album)

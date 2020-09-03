@@ -19,38 +19,45 @@ def valjasta_koik():
 
 # valjasta_koik()
 
-
 with open("albumid.txt", encoding="utf-8") as file:
-    albumid = []
-    artistid = []
-
-    prev_artist = ""
-    prev_album = ""
+    l_albumid = []
+    l_artistid = []
+    prev_artists = ""
+    prev_albums = ""
     prev_laul = ""
+
 
     for line in file:
         artist, albumi_pealkiri, ilmumis_aasta, laulu_pealkiri = line.split("\t")
 
-        if artist != prev_artist:
-            artistid.append(Artist(artist))
-            with artistid[len(artistid)-1] as viimne_artist:
+        if artist not in prev_artists:
+            l_artistid.append(Artist(artist))
+            with l_artistid[len(l_artistid)-1] as viimne_artist:
                 viimne_artist.lisa_albumi(Album(albumi_pealkiri, ilmumis_aasta, viimne_artist))
-                viimne_artist.albumid[viimne_artist].lisa
+                viimne_artist.albumid[len(viimne_artist.albumid)-1].lisa_laul(Laul(laulu_pealkiri, viimne_artist))
         else:
-            pass
+            with l_artistid[len(l_artistid) - 1] as viimne_artist:
+                if albumi_pealkiri not in prev_albums:
+                    viimne_artist.lisa_albumi(Album(albumi_pealkiri, ilmumis_aasta, viimne_artist).lisa_laul(Laul(laulu_pealkiri, viimne_artist)))
+                    #viimne_artist.albumid[len(viimne_artist.albumid)-1].lisa_laul(Laul(laulu_pealkiri, viimne_artist))
+                else:
+                    viimne_artist.albumid[len(viimne_artist.albumid) - 1].lisa_laul(Laul(laulu_pealkiri, viimne_artist))
 
-        if albumi_pealkiri != prev_album:
-            albumid.append(Album(albumi_pealkiri, ilmumis_aasta, Artist(artist)))
-            albumid[len(albumid)-1].lisa_laul(Laul(laulu_pealkiri, artistid[len(artistid)-1]))
-        else:
-            albumid[len(albumid) - 1].lisa_laul(Laul(laulu_pealkiri, artistid[len(artistid) - 1]))
-
-        prev_artist = artist
-        prev_album = albumi_pealkiri
+        prev_artists += artist
+        prev_albums += albumi_pealkiri
         prev_laul = laulu_pealkiri
 
-for album in albumid:
-    print(album.pealkiri + ":\n" + album.artist.nimi)
+for e_artist in l_artistid:  # Võtab iga artisti objekti, mis on l_artistid listis
+    print(e_artist.nimi)
+    print("ARTISITD:", e_artist)
+    for e_album in e_artist.albumid:  # Võtab iga albumi objekti, mis on e_artisti objekti "albumid" omaduse listis
+        print("\t" + e_album.pealkiri, "(" + e_album.aasta + "):")
+        print("\tALBUMID:", e_artist.albumid)
+        for nr, e_laul in enumerate(e_album.laulud):  # Võtab ja nummerdab iga laulu objekti, mis on e_album objekti "laulud" omaduse listis
+            print("\t\t" + str(nr+1) + ". " + e_laul.pealkiri)
+            print("\t\tLAULUD:", e_album.laulud)
+    break
+
 """
 # Laulu objektid
 laul_1 = Laul("Journey to the West", "Elijah Nang")

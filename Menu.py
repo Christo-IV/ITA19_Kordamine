@@ -83,23 +83,22 @@ with open("albumid.txt", encoding="utf-8") as file:
     l_albumid = []  # (obj) List kus on kõik "Album" objektid
     l_laulud = []  # (obj) List kus on kõik "Laul" objektid
 
+    l_art_nimed = []  # (str) List kus on kõikide "Artist" objektide nimed sees
+
     for line in file:
         artist, albumi_pealkiri, ilmumis_aasta, laulu_pealkiri = line.strip("\n").split("\t")
-        try:
-            if artist != l_artistid[-1].nimi:
-                l_artistid.append(Artist(artist))
-                l_albumid.append(Album(albumi_pealkiri, ilmumis_aasta, l_artistid[-1]))
-                l_artistid[-1].lisa_album(l_albumid[-1])
 
-            elif l_artistid[-1].albumid[-1].pealkiri != albumi_pealkiri:
-                l_albumid.append(Album(albumi_pealkiri, ilmumis_aasta, l_artistid[-1]))
-                l_artistid[-1].lisa_album(l_albumid[-1])
-            else:
-                pass
-        except IndexError:  # Kuna esimene objekt, mis lisatakse list'i annab (selle koodiga) alati IndexError'i
+        if artist not in l_art_nimed:
             l_artistid.append(Artist(artist))
+            l_art_nimed.append(artist)
             l_albumid.append(Album(albumi_pealkiri, ilmumis_aasta, l_artistid[-1]))
             l_artistid[-1].lisa_album(l_albumid[-1])
+
+        elif l_artistid[l_art_nimed.index(artist)].albumid[-1].pealkiri != albumi_pealkiri:
+            l_albumid.append(Album(albumi_pealkiri, ilmumis_aasta, l_artistid[-1]))
+            l_artistid[l_art_nimed.index(artist)].lisa_album(l_albumid[-1])
+        else:
+            pass
 
         l_laulud.append(Laul(laulu_pealkiri, l_artistid[-1], l_albumid[-1]))
         l_artistid[-1].albumid[-1].lisa_laul(l_laulud[-1])

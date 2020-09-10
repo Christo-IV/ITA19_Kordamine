@@ -77,7 +77,6 @@ def ul_otsing(p_otsitav):
 # Kategooriline otsing (otsib tulemusi ainult kindlast listist ("l_artistid", "l_albumid" või "l_laulud"))
 def kat_otsing(p_list, p_otsitav):
     listid = [l_artistid, l_albumid, l_laulud]
-    tulemused = []
     jrk = 1
     for thing in listid[int(p_list)-1]:
         try:

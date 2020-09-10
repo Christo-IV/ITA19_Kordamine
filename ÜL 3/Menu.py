@@ -94,7 +94,7 @@ def kat_otsing(p_list, p_otsitav):
 
 
 # Artist, Album & Laul objektide tegemine ja kindlatesse listidesse lisamine
-with open("albumid.txt", encoding="utf-8") as file:
+with open(r"C:\Users\Christo\PycharmProjects\ITA19_Kordamine\ÜL 3\albumid.txt", encoding="utf-8") as file:
     l_artistid = []  # (obj) List kus on kõik "Artist" objektid
     l_albumid = []  # (obj) List kus on kõik "Album" objektid
     l_laulud = []  # (obj) List kus on kõik "Laul" objektid

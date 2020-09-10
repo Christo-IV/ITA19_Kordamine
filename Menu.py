@@ -19,8 +19,9 @@ def valjasta_koik():
 """
 # valjasta_koik()
 
-# Kindlate tulemuste/objektide otsimine ("l_artistid", "l_albumid", "l_laulud" hulgust) ja nende väljastamine konsooli
-def otsing(p_otsitav_märksõna):
+
+#Üldine otsing (otsitakse tulemusi "l_artistid", "l_albumid" ja "l_laulud" listidest ja väljastatakse tulemused konsooli
+def ul_otsing(p_otsitav):
     """
 
      :param p_otsitav_märksõna:
@@ -34,19 +35,19 @@ def otsing(p_otsitav_märksõna):
     tulemused = [[], [], []]
 
     # Otsimine
-    p_otsitav_märksõna = str(p_otsitav_märksõna).lower()
+    p_otsitav = str(p_otsitav).lower()
     for e_laul in l_laulud:
-        if p_otsitav_märksõna in e_laul.pealkiri.lower():
+        if p_otsitav in e_laul.nimi.lower():
             tulemused[0].append(e_laul)
         else:
             pass
     for e_album in l_albumid:
-        if p_otsitav_märksõna in (e_album.pealkiri.lower(), str(e_album.aasta)):
+        if p_otsitav in e_album.nimi.lower() or p_otsitav in str(e_album.aasta):
             tulemused[1].append(e_album)
         else:
             pass
     for e_artist in l_artistid:
-        if p_otsitav_märksõna in e_artist.nimi.lower():
+        if p_otsitav in e_artist.nimi.lower():
              tulemused[2].append(e_artist)
         else:
              pass
@@ -57,25 +58,41 @@ def otsing(p_otsitav_märksõna):
             if type(e_grupp[0]) == Laul:
                 print("[Laulud]:")
                 for nr, e_laul in enumerate(e_grupp, 1):
-                    print("\t%s. '%s' --- %s (%s (%s))" % (
-                    nr, e_laul.pealkiri, e_laul.artist.nimi, e_laul.album.pealkiri, str(e_laul.album.aasta)))
+                    e_laul.valjasta(1,nr)
                 print() # Et paremini eraldada gruppe
+
             elif type(e_grupp[0]) == Album:
                 print("[Albumid]:")
                 for nr, e_album in enumerate(e_grupp, 1):
-                    print("\t%s. %s (%s)" % (nr, e_album.pealkiri, e_album.aasta))
+                    e_album.valjasta(1, nr)
                 print() # Et paremin eraldada gruppe
+
             elif type(e_grupp[0]) == Artist:
                 print("[Artistid]:")
                 for nr, e_artist in enumerate(e_grupp, 1):
-                    print("\t%s. %s:" % (nr, e_artist.nimi))
-                    for nr, e_album2 in enumerate(e_artist.albumid, 1):
-                        print("\t\t%s. %s (%s)" % (nr, e_album2.pealkiri, e_album2.aasta))
-            else:
-                print("Midagi läks valesti ( otsing(), 4. else statement )")
-        except IndexError:  # Kui ei leitud otsingu ajal (näitkes) ühtegi laulu siis läheb järgmise gruppi juurde,
-                        # mis oleks sel juhul Albumid.
+                    e_artist.valjasta(1, nr)
+        except IndexError:  # Kui ei leitud otsingu ajal (näitkes) ühtegi laulu siis läheb järgmise gruppi juurde
             continue
+
+# Kategooriline otsing (otsib tulemusi ainult kindlast listist ("l_artistid", "l_albumid" või "l_laulud"))
+def kat_otsing(p_list, p_otsitav):
+    listid = [l_artistid, l_albumid, l_laulud]
+    tulemused = []
+    jrk = 1
+    for thing in listid[int(p_list)-1]:
+        try:
+            if p_otsitav in str(thing.aasta):
+                thing.valjasta(1, jrk)
+                jrk += 1
+            else:
+                raise AttributeError("Otsitav pole number")
+        except AttributeError:
+            if p_otsitav.lower() in thing.nimi.lower():
+                thing.valjasta(1, jrk)
+                jrk += 1
+            else:
+                pass
+
 
 # Artist, Album & Laul objektide tegemine ja kindlatesse listidesse lisamine
 with open("albumid.txt", encoding="utf-8") as file:
@@ -94,7 +111,7 @@ with open("albumid.txt", encoding="utf-8") as file:
             l_albumid.append(Album(albumi_pealkiri, ilmumis_aasta, l_artistid[-1]))
             l_artistid[-1].lisa_album(l_albumid[-1])
 
-        elif l_artistid[l_art_nimed.index(artist)].albumid[-1].pealkiri != albumi_pealkiri:
+        elif l_artistid[l_art_nimed.index(artist)].albumid[-1].nimi != albumi_pealkiri:
             l_albumid.append(Album(albumi_pealkiri, ilmumis_aasta, l_artistid[-1]))
             l_artistid[l_art_nimed.index(artist)].lisa_album(l_albumid[-1])
         else:
@@ -103,5 +120,17 @@ with open("albumid.txt", encoding="utf-8") as file:
         l_laulud.append(Laul(laulu_pealkiri, l_artistid[-1], l_albumid[-1]))
         l_artistid[-1].albumid[-1].lisa_laul(l_laulud[-1])
 
+# Üldine otsing
+#while True:
+    #ul_otsing(input("Otsing: "))
 
-otsing(input("Otsing: "))
+# Kategooriline otsing / Suunatud otsing
+
+while True:
+    print("\nKategooria:")
+    print("\t1. Artistid")
+    print("\t2. Albumid")
+    print("\t3. Laulud")
+
+    kat_otsing(input("Nr: "), input("Otsing: "))
+

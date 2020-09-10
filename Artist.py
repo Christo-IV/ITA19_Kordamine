@@ -16,8 +16,7 @@ class Artist:
     def lisa_album(self, p_album):
         self.albumid.append(p_album)
 
-    def valjasta(self, p_indents, p_jrk):
-        p_indents = "\t" * p_indents
-        print(p_indents + str(p_jrk) + ". " + self.nimi + ":")
+    def valjasta(self, p_jrk):
+        print("\t%s. %s:" % (str(p_jrk), self.nimi))
         for nr, album in enumerate(self.albumid, 1):
-            print(p_indents + "\t%s. %s (%s)" % (str(nr), album.nimi, str(album.aasta)))
+            print("\t\t%s. %s (%s)" % (str(nr), album.nimi, str(album.aasta)))

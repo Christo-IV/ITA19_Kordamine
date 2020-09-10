@@ -20,8 +20,5 @@ class Album:
     def lisa_laul(self, p_laul):
         self.laulud.append(p_laul)
 
-    def valjasta(self, p_indents, p_jrk):
-        p_indents = "\t" * p_indents
-        print(p_indents + "%s. %s (%s) - %s" % (str(p_jrk), self.nimi, str(self.aasta), self.artist.nimi))
-        # for nr, laul in enumerate(self.laulud, 1):
-        #   print(p_indents + "\t" + str(nr) + ". " + laul.nimi)
+    def valjasta(self, p_jrk):
+        print("\t%s. %s (%s) - %s" % (str(p_jrk), self.nimi, str(self.aasta), self.artist.nimi))

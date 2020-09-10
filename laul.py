@@ -15,7 +15,6 @@ class Laul:
         self.artist = p_artist
         self.album = p_album
 
-    def valjasta(self, p_indents, p_jrk):
-        p_indents = "\t" * p_indents
-        print(p_indents + "%s. '%s' - %s (%s (%s))" %
+    def valjasta(self, p_jrk):
+        print("\t%s. '%s' - %s (%s (%s))" %
               (str(p_jrk), self.nimi, self.artist.nimi, self.album.nimi, str(self.album.aasta)))

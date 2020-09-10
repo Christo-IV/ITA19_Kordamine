@@ -58,19 +58,19 @@ def ul_otsing(p_otsitav):
             if type(e_grupp[0]) == Laul:
                 print("[Laulud]:")
                 for nr, e_laul in enumerate(e_grupp, 1):
-                    e_laul.valjasta(1,nr)
+                    e_laul.valjasta(nr)
                 print() # Et paremini eraldada gruppe
 
             elif type(e_grupp[0]) == Album:
                 print("[Albumid]:")
                 for nr, e_album in enumerate(e_grupp, 1):
-                    e_album.valjasta(1, nr)
+                    e_album.valjasta(nr)
                 print() # Et paremin eraldada gruppe
 
             elif type(e_grupp[0]) == Artist:
                 print("[Artistid]:")
                 for nr, e_artist in enumerate(e_grupp, 1):
-                    e_artist.valjasta(1, nr)
+                    e_artist.valjasta(nr)
         except IndexError:  # Kui ei leitud otsingu ajal (näitkes) ühtegi laulu siis läheb järgmise gruppi juurde
             continue
 
@@ -82,13 +82,13 @@ def kat_otsing(p_list, p_otsitav):
     for thing in listid[int(p_list)-1]:
         try:
             if p_otsitav in str(thing.aasta):
-                thing.valjasta(1, jrk)
+                thing.valjasta(jrk)
                 jrk += 1
             else:
                 raise AttributeError("Otsitav pole number")
         except AttributeError:
             if p_otsitav.lower() in thing.nimi.lower():
-                thing.valjasta(1, jrk)
+                thing.valjasta(jrk)
                 jrk += 1
             else:
                 pass
@@ -125,7 +125,6 @@ with open("albumid.txt", encoding="utf-8") as file:
     #ul_otsing(input("Otsing: "))
 
 # Kategooriline otsing / Suunatud otsing
-
 while True:
     print("\nKategooria:")
     print("\t1. Artistid")
